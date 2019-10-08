@@ -18,7 +18,5 @@ export default (to, from, next) => {
     }
   }
   to.meta.query = formatedQuery
-  console.log(formatedQuery)
-  Object.defineProperty(to, 'query', formatedQuery)
   next()
 }
