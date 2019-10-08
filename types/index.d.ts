@@ -3,5 +3,4 @@ import VueRouter from 'vue-router'
 
 export class VueRouterPlus extends VueRouter {}
 
-
 export default VueRouterPlus
