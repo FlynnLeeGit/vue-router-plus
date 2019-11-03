@@ -7,17 +7,25 @@
       <li>
         <router-link to="/b">B</router-link>
       </li>
+      <li>
+        <router-link to="/c">C</router-link>
+      </li>
+      <li>
+        <router-link to="/d">D</router-link>
+      </li>
     </ul>
     <p>
       <button @click="pushA">push A</button>
     </p>
     <p>
-      <button @click="replaceA">replace A {a:1}</button>
+      <button @click="replaceA">replace A</button>
     </p>
     <p>
-      <button @click="onReload">onReload</button>
+      <button @click="onReload">router.reload()</button>
     </p>
     <p>meta.query {{ $route.meta.query }} | query {{ $route.query }}</p>
+
+    <!-- <button @click="onRedirect">redirect</button> -->
     <router-view></router-view>
   </div>
 </template>
@@ -30,9 +38,8 @@ export default {
         query: {
           age: (Math.random() * 20).toFixed(0),
           arr: [1, 23],
-          name: ''
-        },
-        force: true
+          name: ""
+        }
       });
     },
     replaceA() {
@@ -40,8 +47,7 @@ export default {
         path: "/a",
         query: {
           a: 1
-        },
-        force: true
+        }
       });
     },
     onReload() {

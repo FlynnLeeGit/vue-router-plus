@@ -1,7 +1,6 @@
 import VueRouter from 'vue-router'
 import queryOptions from './before/query-options'
-import { isString, cloneDeep } from './utils'
-
+import * as utils from './utils'
 let isHistoryBF = false
 
 class VueRouterPlus extends VueRouter {
@@ -10,72 +9,74 @@ class VueRouterPlus extends VueRouter {
     window.addEventListener('popstate', () => {
       isHistoryBF = true
     })
+    Vue.mixin({
+      beforeCreate() {
+        Vue.util.defineReactive(this, '$searchQuery', this.$route.meta.query)
+      },
+      beforeRouteUpdate(to, from, next) {
+        this.$searchQuery = this.$route.meta.query
+        next()
+      }
+    })
   }
   constructor(routeOptions) {
     super(routeOptions)
-    this.beforeEach(queryOptions)
+
     this._forceCount = 1
+
+    this.beforeEach(queryOptions)
   }
   get isHistoryBF() {
     return isHistoryBF
   }
+  beforeEach(fn) {
+    return super.beforeEach(utils.hookWrapper(fn))
+  }
+  beforeResolve(fn) {
+    return super.beforeResolve(utils.hookWrapper(fn))
+  }
+  redirect(redirectLocation, onComplete, onError) {
+    // before vue-router will detect if the replace event is in one tick,so here we add a setTimeout to skip this dectect
+    setTimeout(() => {
+      return this.replace(redirectLocation, onComplete, onError)
+    })
+  }
+  /**
+   * @param {string} mode replace|push
+   * @param {string|object} location
+   * @param {Function} onComplete
+   * @param {Function} onError
+   */
   _goto(mode, location, onComplete, onError) {
     isHistoryBF = false
-    if (isString(location)) {
-      super[mode](location, onComplete, onError)
-      return
-    }
-    if (!location.force) {
-      super[mode](location, onComplete, onError)
-      return
-    }
+    // if this is router-link href,just use it,can prevent same url redirect
+    // if (location && location._normalized) {
+    //   return super[mode](location, onComplete, onError)
+    // }
 
-    location.query = location.query || {}
-
-    const toLocation = cloneDeep(location)
-    toLocation.query._f = this._forceCount++
-
-    if (mode === 'push') {
-      // keep _f query
-      super[mode](toLocation, onComplete, onError)
+    const { route } = this.resolve(location)
+    const newLocation = {
+      path: route.path,
+      query: Object.assign(route.query, {
+        _f: this._forceCount++
+      }),
+      params: route.params,
+      hash: route.hash
     }
-    if (mode === 'replace') {
-      const oriLocation = cloneDeep(location)
-      oriLocation.query._f = undefined
-      const oriHref = this.resolve(oriLocation).href
-      super[mode](
-        toLocation,
-        () => {
-          setTimeout(() => {
-            window.history.replaceState(null, null, oriHref)
-            onComplete && onComplete()
-          })
-        },
-        onError
-      )
-    }
+    return super[mode](newLocation, onComplete, onError)
   }
   push(location, onComplete, onError) {
-    this._goto('push', location, onComplete, onError)
+    return this._goto('push', location, onComplete, onError)
   }
   replace(location, onComplete, onError) {
-    this._goto('replace', location, onComplete, onError)
+    return this._goto('replace', location, onComplete, onError)
   }
   // spa reload current Route and force get Data again
   reload(onComplete, onError) {
     const current = this.currentRoute
-    this.replace(
-      {
-        path: current.path,
-        query: current.query,
-        params: current.params,
-        hash: current.hash,
-        force: true
-      },
-      onComplete,
-      onError
-    )
+    this.replace(current.fullPath, onComplete, onError)
   }
 }
 
+export const hookWrapper = utils.hookWrapper
 export default VueRouterPlus

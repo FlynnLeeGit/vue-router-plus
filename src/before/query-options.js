@@ -1,5 +1,5 @@
 import { cloneDeep } from '../utils'
-export default (to, from, next) => {
+const queryOptions = to => {
   if ('_f' in to.query) {
     delete to.query['_f']
   }
@@ -18,5 +18,6 @@ export default (to, from, next) => {
     }
   }
   to.meta.query = formatedQuery
-  next()
 }
+
+export default queryOptions
