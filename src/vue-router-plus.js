@@ -11,10 +11,14 @@ class VueRouterPlus extends VueRouter {
     })
     Vue.mixin({
       beforeCreate() {
-        Vue.util.defineReactive(this, '$searchQuery', this.$route.meta.query)
+        if (this.$route) {
+          Vue.util.defineReactive(this, '$searchQuery', this.$route.meta.query)
+        }
       },
       beforeRouteUpdate(to, from, next) {
-        this.$searchQuery = this.$route.meta.query
+        if (this.$route) {
+          this.$searchQuery = this.$route.meta.query
+        }
         next()
       }
     })
@@ -23,6 +27,8 @@ class VueRouterPlus extends VueRouter {
     super(routeOptions)
 
     this._forceCount = 1
+    this.from = {}
+    this.to = {}
 
     this.beforeEach(queryOptions)
   }
@@ -30,15 +36,19 @@ class VueRouterPlus extends VueRouter {
     return isHistoryBF
   }
   beforeEach(fn) {
-    return super.beforeEach(utils.hookWrapper(fn))
+    return super.beforeEach((to, from, next) => {
+      this.from = from
+      this.to = to
+      return hookWrapper(fn)(to, from, next)
+    })
   }
   beforeResolve(fn) {
     return super.beforeResolve(utils.hookWrapper(fn))
   }
   redirect(redirectLocation, onComplete, onError) {
-    // before vue-router will detect if the replace event is in one tick,so here we add a setTimeout to skip this dectect
-    setTimeout(() => {
-      return this.replace(redirectLocation, onComplete, onError)
+    // shoud call this with return this.router.redirect({...})
+    return Promise.resolve().then(() => {
+      this.replace(redirectLocation, onComplete, onError)
     })
   }
   /**

@@ -36,7 +36,12 @@ reload spa will reload with the currentRoute
 now you can just type
 
 ```js
-router.redirect('/b')
+router.beforeEach(to => {
+  if (to.name === 'a') {
+    // notice here you should return,actually it's a promise
+    return router.redirect('/b')
+  }
+})
 ```
 
 to redirect any target location, in any hook,don't need to judge where the route from
@@ -114,6 +119,14 @@ a.vue
     })
   }
 </script>
+```
+
+### router.to,router.from
+
+router.to is equal to every hook s to router.from is equal to every hook s from
+
+```js
+console.log(this.$router.to)
 ```
 
 ### alias
