@@ -5,6 +5,9 @@
         <router-link to="/a">A</router-link>
       </li>
       <li>
+        <router-link to="/a?age=6">A /a?age=6</router-link>
+      </li>
+      <li>
         <router-link to="/b">B</router-link>
       </li>
       <li>
@@ -34,25 +37,25 @@ export default {
   methods: {
     pushA() {
       this.$router.push({
-        path: "/a",
+        path: '/a',
         query: {
           age: (Math.random() * 20).toFixed(0),
           arr: [1, 23],
-          name: ""
+          name: ''
         }
-      });
+      })
     },
     replaceA() {
       this.$router.replace({
-        path: "/a",
+        path: '/a',
         query: {
           a: 1
         }
-      });
+      })
     },
     onReload() {
-      this.$router.reload();
+      this.$router.reload()
     }
   }
-};
+}
 </script>

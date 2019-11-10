@@ -1,11 +1,20 @@
 # vue-router-plus
 
-this vue-router-plus is extends from vue-router but add some base functions
+this vue-router-plus is extends from vue-router but plus some features
+
+## notice
+
+vue-router-plus now only support `vue-router@3.0.7` because the vue-router 3.1.\* upper use the promise style that will product uncaught promise error,[see this](https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378)
+
+- all navigation behavior will be **force** style
+- routes config support `queryOptions`,and add `$route.meta.query`
+- `vm.$searchQuery`
+- wrapper function `plusHook`, just wrap the original route hook
+- router.isHistoryBF,whether the router is in popstate progressing
 
 ### force push && replace
 
-all route-link .push .replace will be force mode
-this resolve the self loop problem
+all `route-link` `.push` `.replace` will be force mode,to resolve same route redirect loop problem
 
 ```js
 // force push some path,even the final path is same, it will append _f query
@@ -31,20 +40,9 @@ this.$router.replace({
 
 reload spa will reload with the currentRoute
 
-### router.redirect(location)
-
-now you can just type
-
 ```js
-router.beforeEach(to => {
-  if (to.name === 'a') {
-    // notice here you should return,actually it's a promise
-    return router.redirect('/b')
-  }
-})
+this.$router.reload()
 ```
-
-to redirect any target location, in any hook,don't need to judge where the route from
 
 ### router.isHistoryBF {boolean}
 
@@ -52,9 +50,9 @@ a tag show whether the user press the browser `forward` or `backward` button
 
 - only effect in `history` mode
 
-### router.beforeEach add queryOptions
+### queryOptions
 
-typed query options in router meta
+typed query options in routes config meta
 
 routes.js
 
@@ -72,16 +70,19 @@ routes.js
 ]
 ```
 
-route.meta.query will be
+then route.meta.query will be
 
 - /a -> {age: 20, name: 'lee' }
 - /a?age=33 -> {age: 33,name:'lee' }
 - /a?age=22&name=cc -> {age:22,name:'cc'}
 
-### router.beforeEach,router.beforeResolve
+### plusHook Support
 
-these two api now support promise or subscribe mode,no need to use `next` function
-now it only support `router.beforeEach` && `router.beforeResolve` hook
+the **plusHook** function can do a lot things that reduce the time on debug vue-router
+
+- resolve the same route loop problem,by always append `_f` query on `next` function
+- support `promisable` or `subscribe` style route hook
+- auto enabled in global hook like `router.beforeEach` and `router.beforeResolve`
 
 ```js
 router.beforeEach(to => {
@@ -99,21 +100,31 @@ router.beforeEach(to=>{
 })
 ```
 
-### use promisable hook in mixin or .vue
+redirect sense
 
-hookWrapper function can turn a `next` callback style hook to promisable or observable hook,just wrapper the original `next` style hook
+```js
+router.beforeEach((to, from, next) => {
+  if (to.path === '/parent') {
+    next('/parent/child') // -> /prent/child?_f=3
+    return // this return prevent the below `next` function excute
+  }
+  next()
+})
+```
+
+#### use plusHook in mixin or .vue
 
 a.vue
 
 ```html
 <script>
-  import { hookWrapper } from 'vue-router-plus'
+  import { plusHook } from 'vue-router-plus'
 
   export default {
-    beforeRouteEnter: hookWrapper(function(to) {
+    beforeRouteEnter: plusHook(function(to) {
       console.log(to)
     }),
-    beforeRouteUpdate: hookWrapper(function(to) {
+    beforeRouteUpdate: plusHook(function(to) {
       console.log(this)
       console.log(to)
     })
@@ -121,15 +132,7 @@ a.vue
 </script>
 ```
 
-### router.to,router.from
-
-router.to is equal to every hook s to router.from is equal to every hook s from
-
-```js
-console.log(this.$router.to)
-```
-
-### alias
+### \$searchQuery
 
 now vue instance provide a prop name \$searchQuery is equal to to.meta.query
 

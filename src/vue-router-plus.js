@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router'
 import queryOptions from './before/query-options'
-import * as utils from './utils'
+import innerPlusHook from './hook-wrapper'
+import store from './store'
 let isHistoryBF = false
 
 class VueRouterPlus extends VueRouter {
@@ -25,32 +26,31 @@ class VueRouterPlus extends VueRouter {
   }
   constructor(routeOptions) {
     super(routeOptions)
-
-    this._forceCount = 1
-    this.from = {}
-    this.to = {}
-
     this.beforeEach(queryOptions)
   }
   get isHistoryBF() {
     return isHistoryBF
   }
   beforeEach(fn) {
-    return super.beforeEach((to, from, next) => {
-      this.from = from
-      this.to = to
-      return hookWrapper(fn)(to, from, next)
-    })
+    return super.beforeEach(plusHook(fn))
   }
   beforeResolve(fn) {
-    return super.beforeResolve(utils.hookWrapper(fn))
+    return super.beforeResolve(plusHook(fn))
   }
-  redirect(redirectLocation, onComplete, onError) {
-    // shoud call this with return this.router.redirect({...})
-    return Promise.resolve().then(() => {
-      this.replace(redirectLocation, onComplete, onError)
-    })
+  _calcNewLocation(location) {
+    const { route } = this.resolve(location)
+
+    const newLocation = {
+      path: route.path,
+      query: Object.assign(route.query, {
+        _f: store._f++
+      }),
+      params: route.params,
+      hash: route.hash
+    }
+    return newLocation
   }
+
   /**
    * @param {string} mode replace|push
    * @param {string|object} location
@@ -59,20 +59,7 @@ class VueRouterPlus extends VueRouter {
    */
   _goto(mode, location, onComplete, onError) {
     isHistoryBF = false
-    // if this is router-link href,just use it,can prevent same url redirect
-    // if (location && location._normalized) {
-    //   return super[mode](location, onComplete, onError)
-    // }
-
-    const { route } = this.resolve(location)
-    const newLocation = {
-      path: route.path,
-      query: Object.assign(route.query, {
-        _f: this._forceCount++
-      }),
-      params: route.params,
-      hash: route.hash
-    }
+    const newLocation = this._calcNewLocation(location)
     return super[mode](newLocation, onComplete, onError)
   }
   push(location, onComplete, onError) {
@@ -81,12 +68,12 @@ class VueRouterPlus extends VueRouter {
   replace(location, onComplete, onError) {
     return this._goto('replace', location, onComplete, onError)
   }
-  // spa reload current Route and force get Data again
+  // // spa reload current Route and force get Data again
   reload(onComplete, onError) {
     const current = this.currentRoute
     this.replace(current.fullPath, onComplete, onError)
   }
 }
 
-export const hookWrapper = utils.hookWrapper
+export const plusHook = innerPlusHook
 export default VueRouterPlus

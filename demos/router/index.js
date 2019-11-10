@@ -2,11 +2,14 @@ import Vue from 'vue'
 import nProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import VueRouterPlus from '../..'
+import { fakeReq } from '../req'
 
 import PageA from '../pages/a.vue'
 import PageB from '../pages/b.vue'
 import PageC from '../pages/c.vue'
 import PageD from '../pages/d.vue'
+import PageA1 from '../pages/a-1.vue'
+import PageA2 from '../pages/a-2.vue'
 
 Vue.use(VueRouterPlus)
 
@@ -27,7 +30,17 @@ const router = new VueRouterPlus({
             default: 'other'
           }
         }
-      }
+      },
+      children: [
+        {
+          path: 'a1',
+          component: PageA1
+        },
+        {
+          path: 'a2',
+          component: PageA2
+        }
+      ]
     },
     {
       path: '/b',
@@ -66,17 +79,30 @@ const router = new VueRouterPlus({
   ]
 })
 
-router.beforeEach(() => {
+router.beforeEach(to => {
   nProgress.start()
 })
 
-router.beforeEach(to => {
+router.beforeEach((to, from, next) => {
   if (to.path === '/b') {
-    router.redirect('/c')
+    fakeReq('b').then(() => {
+      next('/c')
+    })
+    return
   }
   if (to.path === '/c') {
-    router.redirect('/d')
+    fakeReq('c').then(() => {
+      next('/d')
+    })
+    return
   }
+  if (to.path === '/d') {
+    fakeReq('d').then(() => {
+      next()
+    })
+    return
+  }
+  next()
 })
 
 router.afterEach(() => {
