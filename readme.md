@@ -137,3 +137,11 @@ a.vue
 now vue instance provide a prop name \$searchQuery is equal to to.meta.query
 
 - $searchQuery === $route.meta.query
+
+### extra router prop
+
+same to beforeEach to,from,next
+
+- router.to
+- router.from
+- router.next

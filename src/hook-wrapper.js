@@ -35,6 +35,10 @@ const hookWrapper = fn =>
     const _to = to
     const _from = from
 
+    store.to = _to
+    store.from = from
+    store.next = _next
+
     // use orginal context
     const ret = fn.call(this, _to, _from, _next)
     // 形参大于2个

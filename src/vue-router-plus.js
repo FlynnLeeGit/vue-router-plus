@@ -31,6 +31,15 @@ class VueRouterPlus extends VueRouter {
   get isHistoryBF() {
     return isHistoryBF
   }
+  get to() {
+    return store.to
+  }
+  get from() {
+    return store.from
+  }
+  get next() {
+    return store.next
+  }
   beforeEach(fn) {
     return super.beforeEach(plusHook(fn))
   }
