@@ -1,5 +1,9 @@
 <template>
-  <div>a-1</div>
+  <div>
+    a-1
+    <button @click="refresh">refresh</button>
+    {{ $searchQuery }}
+  </div>
 </template>
 <script>
 import { plusHook } from '../..'
@@ -16,6 +20,17 @@ export default {
   }),
   beforeRouteUpdate: plusHook(() => {
     return fakeReq('a1-update')
-  })
+  }),
+  methods: {
+    refresh() {
+      this.$router.push({
+        query: {
+          c: Math.random()
+            .toString(16)
+            .slice(2)
+        }
+      })
+    }
+  }
 }
 </script>

@@ -2,6 +2,8 @@
   <div>
     Page A $searchQuery {{ $searchQuery }}
     {{a}}
+    <router-link to='./a1'>a1</router-link>
+    <router-link to='./a2'>a2</router-link>
     <router-view />
   </div>
 </template>

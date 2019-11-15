@@ -16,11 +16,13 @@ class VueRouterPlus extends VueRouter {
           Vue.util.defineReactive(this, '$searchQuery', this.$route.meta.query)
         }
       },
-      beforeRouteUpdate(to, from, next) {
-        if (this.$route) {
-          this.$searchQuery = this.$route.meta.query
+      // 修复有其他钩子影响query时需要同步变更
+      watch: {
+        $route(newRoute) {
+          if (newRoute.meta.query) {
+            this.$searchQuery = newRoute.meta.query
+          }
         }
-        next()
       }
     })
   }

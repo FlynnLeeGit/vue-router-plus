@@ -38,7 +38,15 @@ const router = new VueRouterPlus({
         },
         {
           path: 'a2',
-          component: PageA2
+          component: PageA2,
+          meta: {
+            queryOptions: {
+              a1: {
+                type: Number,
+                default: 1
+              }
+            }
+          }
         }
       ]
     },
@@ -68,7 +76,15 @@ const router = new VueRouterPlus({
     },
     {
       path: '/d',
-      component: PageD
+      component: PageD,
+      meta: {
+        queryOptions: {
+          d: {
+            type: Number,
+            default: 1
+          }
+        }
+      }
     },
     {
       path: '*',
