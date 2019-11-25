@@ -16,6 +16,9 @@
       <li>
         <router-link to="/d">D</router-link>
       </li>
+      <li>
+        <router-link to="/e">E</router-link>
+      </li>
     </ul>
     <p>
       <button @click="pushA">push A</button>

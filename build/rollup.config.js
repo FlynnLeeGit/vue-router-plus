@@ -14,9 +14,9 @@ export default {
     banner,
     sourcemap: true,
     format: 'umd',
-    globals: {
-      'vue-router': 'VueRouter'
-    },
+    // globals: {
+    //   'vue-router': 'VueRouter'
+    // },
     name: pkgName
       .split('-')
       .map(i => i[0].toUpperCase() + i.slice(1))

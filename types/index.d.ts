@@ -5,6 +5,7 @@ export class VueRouterPlus extends VueRouter {
   to: Route
   from: Route
   next: (to?: RawLocation | false | ((vm: any) => any) | void) => void
+  isHistoryBF: Boolean
 }
 
 export default VueRouterPlus
