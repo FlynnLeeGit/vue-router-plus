@@ -50,7 +50,6 @@ class VueRouterPlus extends VueRouter {
   }
   _calcNewLocation(location) {
     const { route } = this.resolve(location)
-
     const newLocation = {
       path: route.path,
       query: Object.assign(route.query, {

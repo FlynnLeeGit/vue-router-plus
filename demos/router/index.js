@@ -8,6 +8,7 @@ import PageA from '../pages/a.vue'
 import PageB from '../pages/b.vue'
 import PageC from '../pages/c.vue'
 import PageD from '../pages/d.vue'
+import PageE from '../pages/e.vue'
 import PageA1 from '../pages/a-1.vue'
 import PageA2 from '../pages/a-2.vue'
 
@@ -80,6 +81,18 @@ const router = new VueRouterPlus({
       meta: {
         queryOptions: {
           d: {
+            type: Number,
+            default: 1
+          }
+        }
+      }
+    },
+    {
+      path: '/e',
+      component: PageE,
+      meta: {
+        queryOptions: {
+          e: {
             type: Number,
             default: 1
           }
