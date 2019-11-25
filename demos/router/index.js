@@ -106,6 +106,11 @@ const router = new VueRouterPlus({
       }
     }
   ]
+}, {
+  maxRedirect: {
+    times: 20,
+    duration: 1000
+  }
 })
 
 router.beforeEach(to => {

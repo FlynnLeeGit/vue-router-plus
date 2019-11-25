@@ -1,6 +1,4 @@
 import store from './store'
-const maxJumpTimes = 30
-const maxDuration = 3000
 const createHref = location => {
   if (typeof location === 'string') {
     if (location.includes('?')) {
@@ -45,14 +43,14 @@ const hookWrapper = fn =>
       // 在当前路径下已持续跳转xx秒,跳转次数超过xx次
       let currentDuration = currentTimeStamp - store._pageStage.start_timestamp
       if (
-        currentDuration < maxDuration &&
-        store._pageStage.num > maxJumpTimes
+        currentDuration < store.maxRedirect.duration &&
+        store._pageStage.num > store.maxRedirect.times
       ) {
         // 清空记录栈信息
         store._pageStage.path = ''
         store._pageStage.num = 1
         store._pageStage.start_timestamp = 0
-        throw new Error(`[vue-router-plus] current Page is reload to many times
+        throw new Error(`[vue-router-plus] current route ${to.path} is reload to many times
       }`)
       }
     } else {

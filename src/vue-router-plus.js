@@ -26,8 +26,14 @@ class VueRouterPlus extends VueRouter {
       }
     })
   }
-  constructor(routeOptions) {
+  constructor(routeOptions, routeExtraOptions = {
+    maxRedirect: {
+      times: 20,
+      duration: 3000
+    }
+  }) {
     super(routeOptions)
+    store.maxRedirect = routeExtraOptions.maxRedirect
     this.beforeEach(queryOptions)
   }
   get isHistoryBF() {
@@ -41,6 +47,9 @@ class VueRouterPlus extends VueRouter {
   }
   get next() {
     return store.next
+  }
+  get maxRedirect() {
+    return this.maxRedirect
   }
   beforeEach(fn) {
     return super.beforeEach(plusHook(fn))

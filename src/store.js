@@ -7,5 +7,9 @@ export default {
     num: 1,
     start_timestamp: 0,
     path: ''
+  },
+  maxRedirect: {
+    times: 20,
+    duration: 3000
   }
 }
