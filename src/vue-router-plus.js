@@ -28,7 +28,7 @@ class VueRouterPlus extends VueRouter {
   }
   constructor(routeOptions, routeExtraOptions = {
     maxRedirect: {
-      times: 20,
+      count: 20,
       duration: 3000
     }
   }) {

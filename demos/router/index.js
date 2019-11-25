@@ -108,7 +108,7 @@ const router = new VueRouterPlus({
   ]
 }, {
   maxRedirect: {
-    times: 20,
+    count: 20,
     duration: 1000
   }
 })

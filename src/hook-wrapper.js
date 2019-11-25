@@ -44,7 +44,7 @@ const hookWrapper = fn =>
       let currentDuration = currentTimeStamp - store._pageStage.start_timestamp
       if (
         currentDuration < store.maxRedirect.duration &&
-        store._pageStage.num > store.maxRedirect.times
+        store._pageStage.num > store.maxRedirect.count
       ) {
         // 清空记录栈信息
         store._pageStage.path = ''

@@ -9,7 +9,7 @@ export default {
     path: ''
   },
   maxRedirect: {
-    times: 20,
+    count: 20,
     duration: 3000
   }
 }
