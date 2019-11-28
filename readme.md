@@ -4,13 +4,32 @@ this vue-router-plus is extends from vue-router but plus some features
 
 ## notice
 
-vue-router-plus now only support `vue-router@3.0.7` because the vue-router 3.1.\* upper use the promise style that will product uncaught promise error,[see this](https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378)
+vue-router-plus now intergrate `vue-router@3.0.7` because the vue-router 3.1.\* upper use the promise style that will product uncaught promise error,[see this](https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378)
 
 - all navigation behavior will be **force** style
 - routes config support `queryOptions`,and add `$route.meta.query`
 - `vm.$searchQuery`
 - wrapper function `plusHook`, just wrap the original route hook
 - router.isHistoryBF,whether the router is in popstate progressing
+- infinite redirect loop will throw Error
+
+### use
+
+```js
+import Vue from 'vue'
+import VueRouterPlus from 'vue-router-plus'
+
+
+Vue.use(VueRouterPlus,{
+  // same as vue-router options,
+  // maxRedirect:{  infinite redirect loop upper limit
+  //    count: 20,
+  //   duration: 3000
+  // }
+})
+
+
+```
 
 ### force push && replace
 
