@@ -1,6 +1,6 @@
 {
   "name": "vue-router-plus",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "scripts": {
     "dev": "vue-cli-service serve",
     "dist": "rollup -c build/rollup.config.js"
@@ -19,9 +19,10 @@
     "rollup-plugin-terser": "^5.1.1",
     "terser": "^4.2.0",
     "vue": "^2.6.10",
+    "vue-router": "3.0.7",
     "vue-template-compiler": "^2.6.10"
   },
-  "dependencies": {
-    "vue-router": "^3.0.7"
+  "peerDependencies": {
+    "vue-router": "3.0.7"
   }
 }

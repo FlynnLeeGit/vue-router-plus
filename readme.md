@@ -4,7 +4,7 @@ this vue-router-plus is extends from vue-router but plus some features
 
 ## notice
 
-vue-router-plus now intergrate `vue-router@3.0.7` because the vue-router 3.1.\* upper use the promise style that will product uncaught promise error,[see this](https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378)
+vue-router-plus now only compatibable with `vue-router@3.0.7` because the vue-router 3.1.\* upper use the promise style that will product uncaught promise error,[see this](https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378)
 
 - all navigation behavior will be **force** style
 - routes config support `queryOptions`,and add `$route.meta.query`
