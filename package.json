@@ -1,6 +1,6 @@
 {
   "name": "vue-router-plus",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "scripts": {
     "dev": "vue-cli-service serve",
     "dist": "rollup -c build/rollup.config.js"
