@@ -8,4 +8,6 @@ export class VueRouterPlus extends VueRouter {
   isHistoryBF: Boolean
 }
 
+export { Location, Route, RawLocation }
+
 export default VueRouterPlus
