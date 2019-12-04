@@ -16,7 +16,7 @@ export default {
   beforeRouteEnter: plusHook((to, from, next) => {
     console.log('1111')
     next({
-      path: '/e'
+      path: '/e?a=2'
     })
   })
 }

@@ -19,6 +19,9 @@
       <li>
         <router-link to="/e">E</router-link>
       </li>
+      <li>
+        <router-link to="/tabs?_f=1">tabs</router-link>
+      </li>
     </ul>
     <p>
       <button @click="pushA">push A</button>

@@ -11,6 +11,7 @@ import PageD from '../pages/d.vue'
 import PageE from '../pages/e.vue'
 import PageA1 from '../pages/a-1.vue'
 import PageA2 from '../pages/a-2.vue'
+import PageTab from '../pages/tab.vue'
 
 Vue.use(VueRouterPlus)
 
@@ -93,6 +94,18 @@ const router = new VueRouterPlus({
       meta: {
         queryOptions: {
           e: {
+            type: Number,
+            default: 1
+          }
+        }
+      }
+    },
+    {
+      path: '/tabs',
+      component: PageTab,
+      meta: {
+        queryOptions: {
+          a: {
             type: Number,
             default: 1
           }

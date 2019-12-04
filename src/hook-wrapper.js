@@ -1,4 +1,11 @@
 import store from './store'
+
+const replaceHref = (location) => {
+  if (typeof location === 'string' && location) {
+    return location.replace(/_f=[^&]*&?/g, '').replace(/(&|\?)$/, '')
+  }
+  return ''
+}
 const createHref = location => {
   if (typeof location === 'string') {
     if (location.includes('?')) {
@@ -37,25 +44,27 @@ const hookWrapper = fn =>
     store.to = _to
     store.from = from
     store.next = _next
-    if (store._pageStage.path === _to.path) {
+    if (replaceHref(store._pageStage.fullPath) === replaceHref(_to.fullPath)) {
+      // 当前栈中存储的路径与即将跳转的路由地址一致
+      // 记录次数
       store._pageStage.num++
       let currentTimeStamp = new Date().getTime()
       // 在当前路径下已持续跳转xx秒,跳转次数超过xx次
       let currentDuration = currentTimeStamp - store._pageStage.start_timestamp
       if (
-        currentDuration < store.maxRedirect.duration &&
+        currentDuration > store.maxRedirect.duration &&
         store._pageStage.num > store.maxRedirect.count
       ) {
         // 清空记录栈信息
-        store._pageStage.path = ''
+        store._pageStage.fullPath = ''
         store._pageStage.num = 1
         store._pageStage.start_timestamp = 0
-        throw new Error(`[vue-router-plus] current route ${to.path} is reload to many times
+        throw new Error(`[vue-router-plus] current route ${_to.path} is reload to ${store.maxRedirect.count} times in ${store.maxRedirect.duration}ms
       }`)
       }
     } else {
       // 路径变化,清空记录栈信息
-      store._pageStage.path = _to.path
+      store._pageStage.fullPath = _to.fullPath
       store._pageStage.num = 1
       store._pageStage.start_timestamp = new Date().getTime()
     }

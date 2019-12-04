@@ -6,7 +6,7 @@ export default {
   _pageStage: {
     num: 1,
     start_timestamp: 0,
-    path: ''
+    fullPath: ''
   },
   maxRedirect: {
     count: 20,
