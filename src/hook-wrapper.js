@@ -48,8 +48,6 @@ const hookWrapper = fn =>
     store.to = _to
     store.from = from
     store.next = _next
-    console.log('_pageStage.fullPath', replaceHref(store._pageStage.fullPath))
-    console.log('_to.fullPath', replaceHref(_to.fullPath))
     if (replaceHref(store._pageStage.fullPath) === replaceHref(_to.fullPath)) {
       // 当前栈中存储的路径与即将跳转的路由地址一致
       // 记录次数
@@ -57,8 +55,6 @@ const hookWrapper = fn =>
       let currentTimeStamp = new Date().getTime()
       // 在当前路径下已持续跳转xx秒,跳转次数超过xx次
       let currentDuration = currentTimeStamp - store._pageStage.start_timestamp
-      console.log('currentDuration', currentDuration)
-      console.log('store._pageStage.num', store._pageStage.num)
       if (
         currentDuration > store.maxRedirect.duration &&
         store._pageStage.num > store.maxRedirect.count
