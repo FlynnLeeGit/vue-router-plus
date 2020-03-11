@@ -1,6 +1,6 @@
 {
   "name": "vue-router-plus",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "scripts": {
     "dev": "vue-cli-service serve",
     "dist": "rollup -c build/rollup.config.js"
@@ -24,5 +24,10 @@
   },
   "peerDependencies": {
     "vue-router": "3.0.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlynnLeeGit/vue-router-plus"
+  },
+  "homepage": "https://github.com/FlynnLeeGit/vue-router-plus"
 }
